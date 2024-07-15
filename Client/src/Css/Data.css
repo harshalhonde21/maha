@@ -1,0 +1,63 @@
+h2 {
+    font-family: "Montserrat";
+    text-align: center;
+    margin-top: 7rem;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.print-button {
+    position: fixed;
+    top: 8rem;
+    right: 20px;
+    padding: 0.5rem 2rem;
+    background-color: transparent;
+    color: black;
+    border: 2px solid black;
+    border-radius: 15px;
+    font-family: "Montserrat", sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.print-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.print-button:active {
+    transform: scale(0.95);
+}
+
+.container-table-raw {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    width: 70%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+}
+
+table td {
+    padding: 1px;
+    border: 1.5px solid #4d4949;
+    font-family: "Cabin";
+    text-align: center;
+    font-size: 0.9rem;
+    padding: 0.2rem;
+}
+
+table th {
+    background-color: #000;
+    text-align: left;
+    color: #fff;
+    font-family: "Poppins";
+    text-align: center;
+    padding: 0.2rem;
+    border: 1.5px solid #4d4949;
+    text-align: center;
+    font-size: 0.8rem;
+}
