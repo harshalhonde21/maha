@@ -5,7 +5,7 @@ import {fetchChpFail, fetchChpRequest, fetchChpSuccess} from "../slices/chpSlice
 export const fetchChpEntries = () => async (dispatch) => {
     try {
       dispatch(fetchChpRequest());
-      const response = await axios.get("https://mahagenco.onrender.com/api/v2/chp/get-chp-entry");
+      const response = await axios.get("https://maha-lrki.onrender.com/api/v2/chp/get-chp-entry");
       dispatch(fetchChpSuccess(response.data));
     } catch (error) {
       dispatch(fetchChpFail(error.message));
@@ -17,7 +17,7 @@ export const fetchChpEntries = () => async (dispatch) => {
   export const fetchChpPlainEntries = () => async (dispatch) => {
     try {
       dispatch(fetchChpRequest());
-      const response = await axios.get("https://mahagenco.onrender.com/api/v2/chp/chp-entry");
+      const response = await axios.get("https://maha-lrki.onrender.com/api/v2/chp/chp-entry");
       dispatch(fetchChpSuccess(response.data));
     } catch (error) {
       dispatch(fetchChpFail(error.message));

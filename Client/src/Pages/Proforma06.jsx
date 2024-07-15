@@ -8,7 +8,7 @@ const Proforma06 = React.memo(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5500/api/v3/unloadingEnd/get-proforma"
+          "https://maha-lrki.onrender.com/api/v3/unloadingEnd/get-proforma"
         );
         const result = await response.json();
         if (result.success) {

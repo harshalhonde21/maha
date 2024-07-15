@@ -17,7 +17,7 @@ const SeeUnloadingEnd = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://mahagenco.onrender.com/api/v3/unloadingEnd/get-unloadingEndTps"
+          "https://maha-lrki.onrender.com/api/v3/unloadingEnd/get-unloadingEndTps"
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");

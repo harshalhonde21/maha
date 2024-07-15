@@ -68,7 +68,7 @@ const ChpEntry = React.memo(() => {
       };
 
       await axios.post(
-        "https://mahagenco.onrender.com/api/v2/chp/chp-entry",
+        "https://maha-lrki.onrender.com/api/v2/chp/chp-entry",
         formData, 
         config
       );
