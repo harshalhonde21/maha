@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { DownloadTableExcel } from "react-export-table-to-excel";
 import "../../Css/SeeUnloadingEnd.css";
-import Loader from "../../Components/Loader"
+import Loader from "../../Components/Loader";
 
 const SeeUnloadingEnd = () => {
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,7 @@ const SeeUnloadingEnd = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://maha-lrki.onrender.com/api/v3/unloadingEnd/get-unloadingEndTps"
+          "https://mahagenco.onrender.com/api/v3/unloadingEnd/get-unloadingEndTps"
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -62,7 +63,7 @@ const SeeUnloadingEnd = () => {
   }, [entries, fromDate, toDate, rrNo, coalType]);
 
   if (loading) {
-    return <Loader />
+    return <Loader />;
   }
 
   if (error) {
@@ -174,11 +175,21 @@ const SeeUnloadingEnd = () => {
             />
           </label>
         </div>
+        <div >
+          <DownloadTableExcel
+            filename="UnloadingEndData"
+            sheet="UnloadingEnd"
+            currentTableRef={printRef.current}
+          >
+            <button className="export-button">Export to Excel</button>
+          </DownloadTableExcel>
+        </div>
       </div>
 
       <button className="print-button" onClick={handlePrint}>
         Print
       </button>
+
       <div className="container-table-raw" ref={printRef}>
         <table>
           <thead>

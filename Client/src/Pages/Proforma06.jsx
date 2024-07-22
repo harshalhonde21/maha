@@ -1,8 +1,16 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
+import { DownloadTableExcel } from 'react-export-table-to-excel';
+import "../Css/Proforma06.css";
 
 const Proforma06 = React.memo(() => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const [rawDataOptions, setRawDataOptions] = useState([]);
+  const [selectedRawData, setSelectedRawData] = useState(null);
+  const [coalTypes, setCoalTypes] = useState([]);
+  const [selectedCoalType, setSelectedCoalType] = useState("");
+
+  const tableRef = useRef(null); 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -12,8 +20,14 @@ const Proforma06 = React.memo(() => {
         );
         const result = await response.json();
         if (result.success) {
-          const rawData = result.data.find((item) => item.coalMode === "Road");
-          setData(rawData ? rawData.coalTypes : []);
+          const rawData = result.data.filter((item) => item.coalMode);
+          if (rawData.length > 0) {
+            setRawDataOptions(rawData);
+            setSelectedRawData(rawData[0]);
+            setCoalTypes(rawData[0].coalTypes.map((type) => type.coalType));
+            setData(rawData[0].coalTypes[0].components); 
+            setSelectedCoalType(rawData[0].coalTypes[0].coalType); 
+          }
         }
       } catch (error) {
         setError("Error fetching data");
@@ -22,6 +36,25 @@ const Proforma06 = React.memo(() => {
     };
     fetchData();
   }, []);
+
+  const handleRawDataChange = (event) => {
+    const selectedRawData = rawDataOptions.find(
+      (item) => item.coalMode === event.target.value
+    );
+    setSelectedRawData(selectedRawData);
+    setCoalTypes(selectedRawData.coalTypes.map((type) => type.coalType));
+    setSelectedCoalType(selectedRawData.coalTypes[0].coalType);
+    setData(selectedRawData.coalTypes[0].components);
+  };
+
+  const handleCoalTypeChange = (event) => {
+    const selectedType = event.target.value;
+    setSelectedCoalType(selectedType);
+    const selectedData = selectedRawData.coalTypes.find(
+      (type) => type.coalType === selectedType
+    );
+    setData(selectedData ? selectedData.components : []);
+  };
 
   const renderEntryRow = useCallback((entry, entryIndex) => (
     <tr key={entryIndex}>
@@ -81,106 +114,116 @@ const Proforma06 = React.memo(() => {
         {error ? (
           <p>{error}</p>
         ) : (
-          <table>
-            <thead>
-              <tr>
-                <th rowSpan="3">MONTH</th>
-                <th rowSpan="3">COAL COMPANY</th>
-                <th rowSpan="3">SR. NO.</th>
-                <th rowSpan="3">NAME OF COLLIERY/SIDING</th>
-                <th rowSpan="3">DECL. GCV GR.</th>
-                <th rowSpan="3">GCV BAND</th>
-                <th rowSpan="3">TOTAL NO OF RAKES</th>
-                <th rowSpan="3">RR QTY (MT)</th>
-                <th rowSpan="3">TPS QTY (MT)</th>
-                <th rowSpan="3">T.M%</th>
-                <th colSpan="4">IIA UNLOADING END ANALYSIS RESULT</th>
-                <th rowSpan="3">ARB Basis GCV (Kcal/kg)</th>
-              </tr>
-              <tr>
-                <th rowSpan="2">M%</th>
-                <th rowSpan="2">ASH%</th>
-                <th rowSpan="2">GCV (Kcal/kg)</th>
-                <th rowSpan="2">GCV GRADE</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td rowSpan="23">Dec-23</td>
-                <td colSpan="8">RAW COAL</td>
-                <td colSpan="6">IIA UNLOADING END ANALYSIS RESULT</td>
-              </tr>
-              {data.map((coalType, index) => (
-                coalType.coalType === "Raw Coal" ? coalType.components.map(renderComponentSection) : null
-              ))}
-              <tr>
-                <td colSpan="5">WASHED COAL BY ROAD MODE(WCL)</td>
-                <td>5813 TRUCKS</td>
-                <td>210423.83</td>
-                <td>211722.12</td>
-                <td>16.78</td>
-                <td>6.32</td>
-                <td>36.04</td>
-                <td>4141</td>
-                <td>G11</td>
-                <td>3678</td>
-              </tr>
-              <tr>
-                <td colSpan="5">WASHED COAL (WCL RAIL + ROAD)</td>
-                <td>87 RAKES & 5813 TRUCKS</td>
-                <td>552843.87</td>
-                <td>554232.85</td>
-                <td>15.73</td>
-                <td>6.18</td>
-                <td>38.14</td>
-                <td>3975</td>
-                <td>G12</td>
-                <td>3569</td>
-              </tr>
-              <tr>
-                <td colSpan="5">WASHED COAL BY RAIL MODE(MCL+SECL+WCL)</td>
-                <td>161</td>
-                <td>635420.01</td>
-                <td>631781.58</td>
-                <td>14.79</td>
-                <td>6.10</td>
-                <td>39.27</td>
-                <td>3932</td>
-                <td>G12</td>
-                <td>3568</td>
-              </tr>
-              <tr>
-                <td colSpan="5">WASHED COAL BY RAIL+ROAD MODE(MCL+SECL+WCL)</td>
-                <td>161 RAKES & 5813 TRUCKS</td>
-                <td>845843.84</td>
-                <td>843503.70</td>
-                <td>15.29</td>
-                <td>6.15</td>
-                <td>38.46</td>
-                <td>3984</td>
-                <td>G12</td>
-                <td>3596</td>
-              </tr>
-              <tr>
-                <td colSpan="5">RAW+WASHED COAL (RAIL + ROAD)</td>
-                <td>161 RAKES & 5813 TRUCKS</td>
-                <td>845843.84</td>
-                <td>843503.70</td>
-                <td>15.29</td>
-                <td>6.15</td>
-                <td>38.46</td>
-                <td>3984</td>
-                <td>G12</td>
-                <td>3596</td>
-              </tr>
-            </tbody>
-          </table>
+          <>
+            <div className="filter">
+            <div>
+              <label htmlFor="rawData">Select Raw Data: </label>
+              <select id="rawData" value={selectedRawData?.coalMode} onChange={handleRawDataChange}>
+                {rawDataOptions.map((option) => (
+                  <option key={option.coalMode} value={option.coalMode}>
+                    {option.coalMode}
+                  </option>
+                ))}
+              </select>
+              </div>
+              <div>
+              <label htmlFor="coalType">Select Coal Type: </label>
+              <select id="coalType" value={selectedCoalType} onChange={handleCoalTypeChange}>
+                {coalTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+              </div>
+              <div className="button-container">
+              <DownloadTableExcel
+                filename="Proforma06 Data"
+                sheet="Proforma06"
+                currentTableRef={tableRef.current}
+              >
+                <button className="export-button">Export to Excel</button>
+              </DownloadTableExcel>
+            </div>
+            </div>
+            
+            <div ref={tableRef}>
+              <table style={{marginLeft:'14rem'}}>
+                <thead>
+                  <tr>
+                    <th rowSpan="3">MONTH</th>
+                    <th rowSpan="3">COAL COMPANY</th>
+                    <th rowSpan="3">SR. NO.</th>
+                    <th rowSpan="3">NAME OF COLLIERY/SIDING</th>
+                    <th rowSpan="3">DECL. GCV GR.</th>
+                    <th rowSpan="3">GCV BAND</th>
+                    <th rowSpan="3">TOTAL NO OF RAKES</th>
+                    <th rowSpan="3">RR QTY (MT)</th>
+                    <th rowSpan="3">TPS QTY (MT)</th>
+                    <th rowSpan="3">T.M%</th>
+                    <th colSpan="4">IIA UNLOADING END ANALYSIS RESULT</th>
+                    <th rowSpan="3">ARB Basis GCV (Kcal/kg)</th>
+                  </tr>
+                  <tr>
+                    <th rowSpan="2">M%</th>
+                    <th rowSpan="2">ASH%</th>
+                    <th rowSpan="2">GCV (Kcal/kg)</th>
+                    <th rowSpan="2">GCV GRADE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td rowSpan="23">Dec-23</td>
+                    <td colSpan="8">{selectedCoalType}</td>
+                    <td colSpan="6">IIA UNLOADING END ANALYSIS RESULT</td>
+                  </tr>
+                  {data.map(renderComponentSection)}
+                  {/* <tr>
+                    <td colSpan="5">WASHED COAL BY ROAD MODE(WCL)</td>
+                    <td>5813 TRUCKS</td>
+                    <td>210423.83</td>
+                    <td>211722.12</td>
+                    <td>16.78</td>
+                    <td>6.32</td>
+                    <td>36.04</td>
+                    <td>4141</td>
+                    <td>G11</td>
+                    <td>3678</td>
+                  </tr>
+                  <tr>
+                    <td colSpan="5">WASHED COAL (WCL)</td>
+                    <td>120 RAKES</td>
+                    <td>474844.99</td>
+                    <td>482984.05</td>
+                    <td>14.42</td>
+                    <td>5.08</td>
+                    <td>34.99</td>
+                    <td>4195</td>
+                    <td>G11</td>
+                    <td>3627</td>
+                  </tr>
+                  <tr>
+                    <td colSpan="5">RAW COAL (WCL)</td>
+                    <td>9 RAKES</td>
+                    <td>34047.20</td>
+                    <td>34632.25</td>
+                    <td>11.79</td>
+                    <td>8.67</td>
+                    <td>36.84</td>
+                    <td>3822</td>
+                    <td>G12</td>
+                    <td>3652</td>
+                  </tr> */}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </div>
   );
 });
 
-Proforma06.displayName = "Proforma 06";
+Proforma06.displayName="proforma";
 
 export default Proforma06;
