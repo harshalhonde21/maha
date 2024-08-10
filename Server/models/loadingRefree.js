@@ -71,6 +71,6 @@ const loadingRefreeSchema = new mongoose.Schema({
     }
 });
 
-const LoadingRefree = mongoose.model("LoadingRef", loadingRefreeSchema);
+const LoadingRefree = mongoose.model("LoadingRefmaha", loadingRefreeSchema);
 
 export default LoadingRefree;

@@ -71,6 +71,6 @@ const loadingThirdSchema = new mongoose.Schema({
     }
 });
 
-const loadingThird = mongoose.model("LoadingRef", loadingThirdSchema);
+const loadingThird = mongoose.model("LoadingThird", loadingThirdSchema);
 
 export default loadingThird;

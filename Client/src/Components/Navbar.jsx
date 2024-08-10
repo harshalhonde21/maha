@@ -47,6 +47,7 @@ const Navbar = React.memo(() => {
                 fontFamily: "Poppins",
                 fontSize: "2rem",
                 margin: "1rem",
+                color:'whitesmoke'
               }}
             >
               MahaGenco

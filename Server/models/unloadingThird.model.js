@@ -71,6 +71,6 @@ const unloadingThirdSchema = new mongoose.Schema({
     }
 });
 
-const unloadingThird = mongoose.model("LoadingRef", unloadingThirdSchema);
+const unloadingThird = mongoose.model("UnloadingThird", unloadingThirdSchema);
 
 export default unloadingThird;
