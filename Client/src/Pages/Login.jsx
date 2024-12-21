@@ -6,9 +6,10 @@ import "../Css/Login.css";
 import { useNavigate } from "react-router-dom";
 const Login = React.memo(() => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate()
 
   const handleLogin = (e) => {
     e.preventDefault();
